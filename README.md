@@ -1,2 +1,6 @@
 # WebSocketsDemo
-Real-time data w/ WebSockets talk.  
+Real-time data w/ WebSockets presentation.
+
+```
+npm i && npm start
+```
