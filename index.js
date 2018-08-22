@@ -1,5 +1,6 @@
 /* index.js */
 
+var ips = require('./addresses.js');
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -21,5 +22,7 @@ io.on('connection', function(socket) {
 });
 
 http.listen(3000, function() {
-	console.log('listening on 0.0.0.0:3000');
+	ips.forEach(ip => {
+		console.log(`listening on ${ip}:3000`);
+	});
 });
