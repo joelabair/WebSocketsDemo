@@ -1,28 +1,67 @@
 /* index.js */
 
-var ips = require('./addresses.js');
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+const sn = require('sillyname');
+const qr = require('qr-image');
+const ips = require('./addresses.js');
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+let ip = ips[0];
+
+function getRandomColor() {
+	var letters = '0123456789ABCDEF';
+	var color = '#';
+	for (var i = 0; i < 6; i++) {
+	  color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
+}
+
+app.set('views', __dirname);
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 app.get('/', function(req, res) {
-	res.sendFile(__dirname + '/index.html');
+	let url = `http://${ip}:3030`;
+	res.render('index', { url });
 });
 
-var stack = [];
+app.get('/qr-code', function(req, res){
+  let code = qr.image(`http://${ip}:3030`, { type: 'png', size: 20 });
+  res.setHeader('Content-type', 'image/png');
+  code.pipe(res);
+});
+
+let stack = [];
+let users = {};
 
 io.on('connection', function(socket) {
 	stack.forEach(function(msg) {
 		io.to(`${socket.id}`).emit('chat message', msg);
 	});
+	socket.on('hello', function(userid) {
+		if (!users.hasOwnProperty(userid)) {
+			users[userid] = {
+				name: sn(),
+				color: getRandomColor()
+			};
+		}
+		let user = users[userid];
+		io.emit('greetings', user);
+	});
 	socket.on('chat message', function(msg) {
+		let user = users[msg.u];
+		msg.u = user.name;
+		msg.c = user.color;
+		msg.t = (new Date()).toString();
 		stack.push(msg);
 		io.emit('chat message', msg);
 	});
 });
 
-http.listen(3000, function() {
-	ips.forEach(ip => {
-		console.log(`listening on ${ip}:3000`);
-	});
+
+http.listen(3030, function() {
+	console.log(`listening on ${ip}:3030`);
+	console.log(`go here http://${ip}:3030`);
 });
