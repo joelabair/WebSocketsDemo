@@ -3,7 +3,9 @@
 const sn = require('sillyname');
 const qr = require('qr-image');
 const ips = require('./addresses.js');
-const app = require('express')();
+const express = require('express');
+
+const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
@@ -18,14 +20,7 @@ function getRandomColor() {
 	return color;
 }
 
-app.set('views', __dirname);
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-
-app.get('/', function(req, res) {
-	let url = `http://${ip}:3030`;
-	res.render('index', { url });
-});
+app.use(express.static('public'));
 
 app.get('/qr-code', function(req, res){
   let code = qr.image(`http://${ip}:3030`, { type: 'png', size: 20 });
@@ -60,6 +55,23 @@ io.on('connection', function(socket) {
 	});
 });
 
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+    let status = (err.status || 500);
+    let json = {
+      status: status,
+      message: err.message
+    };
+    console.error(err);
+    res.status(status).send(json);
+});
 
 http.listen(3030, function() {
 	console.log(`listening on ${ip}:3030`);
