@@ -1,0 +1,122 @@
+html {
+	font-size: 1rem !important;
+}
+
+@media (min-width: 544px) {
+	html {
+		font-size: 1.6rem !important;
+	}
+}
+
+@media (min-width: 768px) {
+	html {
+		font-size: 1.4rem !important;
+	}
+}
+
+@media (min-width: 992px) {
+	html {
+		font-size: 1.2rem !important;
+	}
+}
+
+.new_message_head {
+	background: #f5f3f3 none repeat scroll 0 0;
+	float: left;
+	font-size: 1rem;
+	font-weight: 600;
+	padding: 10px;
+	width: 100%;
+}
+
+.message_section {
+	border: 1px solid #dddddd;
+}
+
+.chat_area {
+	float: left;
+	height: 300px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 100%;
+}
+
+.chat_area::after {
+	content: "";
+	background: url('/qr-code') no-repeat center;
+	background-size: contain;
+	opacity: 0.65;
+	top: 0;
+	left: 50%;
+	bottom: 85px;
+	right: 0;
+	position: absolute;
+	z-index: -1;
+	display: none;
+}
+
+@media only screen and (min-device-width: 480px) {
+	.chat_area::after {
+		display: block;
+	}
+}
+
+.chat_area li {
+	padding: 14px 14px 0;
+}
+
+.chat_area li .chat-img1 img {
+	height: 40px;
+	width: 40px;
+}
+
+.chat_area .chat-body1 {
+	margin-left: 50px;
+}
+
+.chat-body1 p {
+	background: transparent;
+	padding: 10px;
+	font-size: .85rem;
+}
+
+.chat_area .admin_chat .chat-body1 {
+	margin-left: 0;
+	margin-right: 50px;
+}
+
+.chat_area li:last-child {
+	padding-bottom: 10px;
+}
+
+.chat_id {
+	padding-top: 3px;
+	font-size: .6rem;
+	color: #555;
+}
+
+.chat_time {
+	margin-left: .5rem;
+	line-height: 1.2rem;
+	font-size: .5rem;
+	color: #aaa;
+}
+
+.message_write {
+	background: #f5f3f3 none repeat scroll 0 0;
+	float: left;
+	padding: 15px;
+	width: 100%;
+}
+
+.message_write textarea.form-control {
+	height: 70px;
+	padding: 10px;
+	font-size: .85rem;
+}
+
+.chat_bottom {
+	float: left;
+	margin-top: 13px;
+	width: 100%;
+}
